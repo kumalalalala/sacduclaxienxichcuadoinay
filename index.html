@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Phát âm thanh tự động</title>
+</head>
+<body>
+  <h1>Chào mừng bạn!</h1>
+  <p>Âm thanh sẽ tự động phát nếu trình duyệt cho phép.</p>
+
+  <audio id="myAudio" autoplay>
+    <source src="sound.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ thẻ audio.
+  </audio>
+
+  <script>
+    // Một số trình duyệt yêu cầu tương tác trước khi phát audio
+    window.addEventListener('click', function () {
+      const audio = document.getElementById("myAudio");
+      if (audio.paused) {
+        audio.play();
+      }
+    });
+  </script>
+</body>
+</html>
