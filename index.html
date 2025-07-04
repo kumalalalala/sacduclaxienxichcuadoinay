@@ -2,24 +2,66 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>nghe cho thấm</title>
+  <title>Nghe đi cho thấm</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+    #playMessage {
+      color: red;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Ấn onlyfans làm gì?</h1>
+  <h1>Ấn vào Onlyfans làm gì?</h1>
   <p>Nghe đi cho thấm</p>
+  <p id="playMessage">cho phép phát âm thanh, nghe cho tịnh người</p>
 
-  <audio id="myAudio" autoplay>
-    <source src="sacduc.mp3" type="audio">
+  <audio id="myAudio" autoplay preload="auto">
+    <source src="sacduc.mp3" type="audio/mpeg">
     Trình duyệt của bạn không hỗ trợ thẻ audio.
   </audio>
 
   <script>
-    // Một số trình duyệt yêu cầu tương tác trước khi phát audio
-    window.addEventListener('click', function () {
-      const audio = document.getElementById("myAudio");
-      if (audio.paused) {
-        audio.play();
+    const audio = document.getElementById("myAudio");
+    const msg = document.getElementById("playMessage");
+
+    // Set volume thấp nhất ban đầu, có thể tăng dần nếu muốn
+    audio.volume = 1;
+
+    // Thử phát ngay
+    const tryPlay = () => {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log("🔊 Audio đã tự phát");
+        }).catch((error) => {
+          console.warn("⛔️ Autoplay bị chặn, đợi click...");
+          msg.style.display = "block";
+        });
       }
+    };
+
+    tryPlay();
+
+    // Nếu người dùng click, phát lại
+    const resumeAudio = () => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          console.log("🎧 Audio phát sau khi click");
+          msg.style.display = "none";
+        }).catch(e => {
+          console.error("Lỗi khi cố phát lại:", e);
+        });
+      }
+    };
+
+    // Lắng nghe mọi loại tương tác
+    ["click", "touchstart", "keydown", "mousemove"].forEach(evt => {
+      window.addEventListener(evt, resumeAudio, { once: true });
     });
   </script>
 </body>
